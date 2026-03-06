@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valeria</title>
+    <style>
+        /* Paleta de colores:
+           Fondo: Blanco (#FFFFFF)
+           Acentos: Café oscuro (#4A3020) y Café claro (#8B5A2B)
+           Texto: Negro (#1A1A1A) y Café
+        */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+            color: #1A1A1A;
+            font-family: 'Georgia', serif; /* Tipografía elegante */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Evita que aparezcan barras de desplazamiento si el botón se mueve mucho */
+        }
+
+        .contenedor {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #4A3020;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            transition: opacity 0.5s ease;
+        }
+
+        .botones-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-family: inherit;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Estilo botón Cierto (Café) */
+        #btn-cierto {
+            background-color: #8B5A2B;
+            color: #FFFFFF;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #btn-cierto:hover {
+            background-color: #4A3020;
+        }
+
+        /* Estilo botón Falso (Negro) */
+        #btn-falso {
+            background-color: #000000;
+            color: #FFFFFF;
+            position: relative; /* Necesario para que se mueva con transform */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Texto final oculto por defecto */
+        #mensaje-final {
+            display: none;
+            font-size: 4rem;
+            color: #000000;
+            font-weight: bold;
+            animation: aparecer 1s ease forwards;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor" id="contenedor-principal">
+        <h1 id="titulo-principal">Yo te amo más</h1>
+        
+        <div class="botones-container" id="caja-botones">
+            <button id="btn-cierto">Cierto</button>
+            <button id="btn-falso">Falso</button>
+        </div>
+    </div>
+
+    <h2 id="mensaje-final">Ves?, no era tan dificil aceptarlo <3 </h2>
+
+    <script>
+        const btnCierto = document.getElementById('btn-cierto');
+        const btnFalso = document.getElementById('btn-falso');
+        const tituloPrincipal = document.getElementById('titulo-principal');
+        const cajaBotones = document.getElementById('caja-botones');
+        const mensajeFinal = document.getElementById('mensaje-final');
+        const contenedorPrincipal = document.getElementById('contenedor-principal');
+
+        // Lógica para cuando acepta (Botón Cierto)
+        btnCierto.addEventListener('click', () => {
+            contenedorPrincipal.style.display = 'none'; // Oculta todo el bloque inicial
+            mensajeFinal.style.display = 'block'; // Muestra el mensaje gigante
+        });
+
+        // Lógica para el botón evasivo (Botón Falso)
+        // Las 5 posiciones predefinidas (usando coordenadas X y Y)
+        const posiciones = [
+            { x: -250, y: -220 },  // Arriba a la izquierda
+            { x: 280, y: -100 },   // Arriba a la derecha
+            { x: -300, y: 200 },   // Abajo a la izquierda
+            { x: 240, y: 190 },    // Abajo a la derecha
+            { x: -190, y: -330 }      // Justo arriba
+        ];
+        
+        let posicionActual = -1;
+
+        // Función que mueve el botón
+        function moverBoton() {
+            let nuevaPosicion;
+            // Se asegura de que no repita la misma posición seguida
+            do {
+                nuevaPosicion = Math.floor(Math.random() * posiciones.length);
+            } while (nuevaPosicion === posicionActual);
+            
+            posicionActual = nuevaPosicion;
+            const moverA = posiciones[posicionActual];
+            
+            // Aplica el movimiento usando CSS Transform para que sea suave
+            btnFalso.style.transform = `translate(${moverA.x}px, ${moverA.y}px)`;
+        }
+
+        // Se activa tanto si pasan el mouse (intentan darle) como si logran darle click
+        btnFalso.addEventListener('mouseover', moverBoton);
+        btnFalso.addEventListener('click', moverBoton);
+    </script>
+
+</body>
+</html>
